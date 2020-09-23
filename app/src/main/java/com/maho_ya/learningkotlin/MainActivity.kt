@@ -10,6 +10,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         nullSafety(savedInstanceState)
+        checkEnum()
     }
 
     // Null安全
@@ -57,13 +58,32 @@ class MainActivity : AppCompatActivity() {
 
         savedInstanceState.containsKey("Test")
 
-
-
         val formatLog2: String? = nullSafetyTest?.formatLog("Test2")
-
         formatLog2.equals("3")
-
     }
 
+    // enumの使用
+    private fun checkEnum() {
+
+        val networkConnection = NetworkConnection(Status.OK, ConnectionStatus.CANCEL)
+
+        // RETRYがない警告がwhenに出る
+        when (networkConnection.status) {
+            Status.OK -> "OK"
+            Status.CANCEL -> "Cancel"
+        }
+
+        // non nullを強制することで、すべてのenumの値の入力を強制できる。この場合、値が足りないとビルドエラーになる。
+        val status  = when (networkConnection.status) {
+            Status.OK -> "OK"
+            Status.CANCEL -> "Cancel"
+            Status.RETRY -> "Retry"
+        }
+
+        // この場合は文字列型なので警告はでない。必要に迫られなければ上記のようにenumで制御する
+        when (networkConnection.connectionStatus.rawString) {
+            "ok" -> "It's ok"
+        }
+    }
 
 }
