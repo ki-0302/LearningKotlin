@@ -17,6 +17,7 @@ class MainActivity : AppCompatActivity() {
         nullSafety(savedInstanceState)
         checkEnum()
         extensionFunctionAndProperties()
+        toUseDataClass()
     }
 
     // Null安全
@@ -104,6 +105,21 @@ class MainActivity : AppCompatActivity() {
         val foo: String = "foo"
         Log.d("extensionProperties", foo.isJapan.toString())
     }
+
+    // data class。マスターのデータ等に使用する。変更の必要がなければプロパティは原則valで宣言すると安全
+    private fun toUseDataClass() {
+
+        val user = User("Tanaka", "Taro", 70.5f)
+
+        // copy()でインスタンスの内容をコピーして、別インスタンスを作成。
+        val modify = user.copy()
+        modify.weight = 80f
+
+        Log.d("toUseDataClass",
+            (user == modify).toString() + " user:" + user.weight.toString() + " modify:" + modify.weight.toString())
+    }
+
+
 }
 
 // 拡張関数。トップレベルで宣言した場合は全体で使用可能
