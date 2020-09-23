@@ -5,12 +5,18 @@ import android.os.Bundle
 import android.util.Log
 
 class MainActivity : AppCompatActivity() {
+
+    // Stringに対し拡張プロパティを追加。private宣言なのでクラス内のみ適用される。
+    private val String.isJapan: Boolean
+        get() = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         nullSafety(savedInstanceState)
         checkEnum()
+        extensionFunctionAndProperties()
     }
 
     // Null安全
@@ -86,4 +92,25 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // 拡張関数・拡張プロパティ。既存の様々なクラスを拡張できる。例:Stringなど
+    private fun extensionFunctionAndProperties() {
+
+        val extension = Extension()
+
+        // 拡張関数はIDE上で黄色で表示される
+        Log.d("extensionFunction", extension.send())
+        Log.d("extensionProperties", extension.count.toString())
+
+        val foo: String = "foo"
+        Log.d("extensionProperties", foo.isJapan.toString())
+    }
 }
+
+// 拡張関数。トップレベルで宣言した場合は全体で使用可能
+fun Extension.send() =
+    "Extension Function send"
+
+// 拡張プロパティ。getが必須
+val Extension.count: Int
+    get() = 3
+
