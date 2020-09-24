@@ -3,6 +3,7 @@ package com.maho_ya.learningkotlin
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import com.maho_ya.learningkotlin.Result
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,6 +19,7 @@ class MainActivity : AppCompatActivity() {
         checkEnum()
         extensionFunctionAndProperties()
         toUseDataClass()
+        toUseSealedClass()
     }
 
     // Null安全
@@ -119,6 +121,20 @@ class MainActivity : AppCompatActivity() {
             (user == modify).toString() + " user:" + user.weight.toString() + " modify:" + modify.weight.toString())
     }
 
+    // Sealed class。非同期のデータの取得処理など状態が変わる処理が書きやすくなる
+    private fun toUseSealedClass() {
+
+        val result :Result<User> =
+            Result.Success(User("Tanaka", "Taro", 50f))
+
+        val resultMessage = when (result) {
+            is Result.Loading -> "Now Loading..."
+            is Result.Success -> result.data.firstName
+            is Result.Error -> result.exception.message.orEmpty()
+        }
+
+        Log.d("toUseSealedClass", resultMessage)
+    }
 
 }
 
