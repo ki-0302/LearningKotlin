@@ -162,9 +162,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         // 引数あり。発火する側でパラメータはセットする
-        interfaceTest.setKotlinOnClickListener1_4a {
-            Log.d("I/F 1_4a", "onEventArg $it")
+        interfaceTest.setKotlinOnClickListener1_4a { count ->
+            Log.d("I/F 1_4a", "onEventArg $count")
         }
+
+        interfaceTest.runEvent(5)
     }
 }
 
