@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity() {
         toUseDataClass()
         toUseSealedClass()
         toUseSamConversions()
+        toUseLamda()
     }
 
     // Null安全
@@ -167,6 +168,26 @@ class MainActivity : AppCompatActivity() {
         }
 
         interfaceTest.runEvent(5)
+    }
+
+    // KotlinでのLamda
+    private fun toUseLamda() {
+
+        // lamdaで型を宣言する。例では (Int, Int) -> Int)
+        val lamda: ((Int, Int) -> Int) = { value, value2 ->
+            value + value2
+        }
+
+        // 呼び出し方法
+        Log.d("toUseLamda", lamda(10, 50).toString())
+
+        // Lamdaでlistnerを持つようなNullableな場合、Lamdaの後にオプショナルを付ける
+        var lamdaListener: ((Int) -> Unit)? = null
+        lamdaListener = {
+            Log.d("toUseLamda", "lamdaListener: $it")
+        }
+
+        lamdaListener(3)
     }
 }
 
