@@ -1,5 +1,7 @@
 package com.maho_ya.learningkotlin
 
+import android.app.Activity
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -172,8 +174,8 @@ class MainActivity : AppCompatActivity() {
         interfaceTest.runEvent(5)
     }
 
-    // KotlinでのLamda
-    private fun toUseLamda() {
+    // KotlinでのLambda
+    private fun toUseLambda() {
 
         // lamdaで型を宣言する。例では (Int, Int) -> Int)
         val lamda: ((Int, Int) -> Int) = { value, value2 ->
@@ -183,13 +185,13 @@ class MainActivity : AppCompatActivity() {
         // 呼び出し方法
         Log.d("toUseLamda", lamda(10, 50).toString())
 
-        // Lamdaでlistnerを持つようなNullableな場合、Lamdaの後にオプショナルを付ける
-        var lamdaListener: ((Int) -> Unit)? = null
-        lamdaListener = {
+        // Lambdaでlistnerを持つようなNullableな場合、Lamdaの後にオプショナルを付ける
+        var lambdaListener: ((Int) -> Unit)? = null
+        lambdaListener = {
             Log.d("toUseLamda", "lamdaListener: $it")
         }
 
-        lamdaListener(3)
+        lambdaListener(3)
     }
 
     // Objectクラスの利用
