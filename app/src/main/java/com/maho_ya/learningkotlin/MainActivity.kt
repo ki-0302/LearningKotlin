@@ -3,6 +3,7 @@ package com.maho_ya.learningkotlin
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.TextView
 import com.maho_ya.learningkotlin.Result
 
 class MainActivity : AppCompatActivity() {
@@ -20,6 +21,7 @@ class MainActivity : AppCompatActivity() {
         extensionFunctionAndProperties()
         toUseDataClass()
         toUseSealedClass()
+        toUseSamConversions()
     }
 
     // Null安全
@@ -136,6 +138,34 @@ class MainActivity : AppCompatActivity() {
         Log.d("toUseSealedClass", resultMessage)
     }
 
+    // SAM変換（Single Abstract Method）
+    // 名前の通り、interfaceに1つの抽象メソッドがある場合のみに適用される
+    private fun toUseSamConversions() {
+
+        val interfaceTest = InterfaceTest()
+
+        // JavaはSAM変換可能
+        interfaceTest.setJavaOnClickListener {
+            Log.d("I/F Java", "onEvent")
+        }
+
+        // 1.3までのKotlinのInterfaceはSAM変換ができず、object式で無名クラスのオブジェクト（オブジェクト宣言）する必要があった
+        interfaceTest.setKotlinOnClickListener(object : KotlinInterface {
+            override fun onEvent() {
+                Log.d("I/F Kotlin", "onEvent")
+            }
+        })
+
+        // 1.4からはfun interfaceを使用するとSAM変換できるようになった
+        interfaceTest.setKotlinOnClickListener1_4 {
+            Log.d("I/F 1_4", "onEvent")
+        }
+
+        // 引数あり。発火する側でパラメータはセットする
+        interfaceTest.setKotlinOnClickListener1_4a {
+            Log.d("I/F 1_4a", "onEventArg $it")
+        }
+    }
 }
 
 // 拡張関数。トップレベルで宣言した場合は全体で使用可能
