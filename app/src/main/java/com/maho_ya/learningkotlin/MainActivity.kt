@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity() {
         toUseSamConversions()
         toUseLamda()
         toUseObjectClass()
+        toUseCompanionObject()
     }
 
     // Null安全
@@ -194,6 +195,14 @@ class MainActivity : AppCompatActivity() {
     // Objectクラスの利用
     private fun toUseObjectClass() {
         Log.d("toUseObjectClass", ObjectClass.Common.APP_NAME)
+    }
+
+    // Companion Object
+    private fun toUseCompanionObject() {
+        // データバインディングをXMLレイアウト上で使用するには@JvmStaticを使用する必要がある
+        MyUtils.convertName("test")
+
+        val cat = MyUtils.factory()
     }
 }
 
