@@ -23,6 +23,7 @@ class MainActivity : AppCompatActivity() {
         toUseSealedClass()
         toUseSamConversions()
         toUseLamda()
+        toUseObjectClass()
     }
 
     // Null安全
@@ -188,6 +189,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         lamdaListener(3)
+    }
+
+    // Objectクラスの利用
+    private fun toUseObjectClass() {
+        Log.d("toUseObjectClass", ObjectClass.Common.APP_NAME)
     }
 }
 
