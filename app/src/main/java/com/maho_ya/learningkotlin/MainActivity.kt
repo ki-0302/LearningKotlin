@@ -24,9 +24,10 @@ class MainActivity : AppCompatActivity() {
         toUseDataClass()
         toUseSealedClass()
         toUseSamConversions()
-        toUseLamda()
+        toUseLambda()
         toUseObjectClass()
         toUseCompanionObject()
+        toUseScope()
     }
 
     // Null安全
@@ -205,6 +206,106 @@ class MainActivity : AppCompatActivity() {
         MyUtils.convertName("test")
 
         val cat = MyUtils.factory()
+    }
+
+    // Scope functions スコープ関数
+    // プロジェクトによっては、thisの扱いがスコープ内部と外で変わるため with, run, applyは使用しないルールになっている場合もある。
+    private fun toUseScope() {
+
+        // * 各戻り値の違い。
+        // let, run, with : lambda resultを返す。そのためContextオブジェクトとは違う値を返せる
+        // apply, also : Contextオブジェクト自身を返す
+
+        // * let
+        // non-nullの場合のみ処理するコードブロックとして使用されるのが一般的。
+        // ?.let {} のようにする。?はnull以外処理するため、このような記述になる。
+        val letString: String? = "letString"
+        letString?.let {
+          Log.d("toUseScope-let", it)
+        }
+
+        // itを別な変数名に変更することで可読性をあげるような使い道もある。
+        val numberList = listOf(1, 2, 3)
+        val fistResult: Int = numberList.first().let {first ->
+            first + 5   // lambdaの戻り値が返る
+        }
+
+        // 引数が1つの関数の場合、 .let(::関数名) でitを引数に渡せる。.let{}でないことに注意
+        val letValue = "letValue"
+        letValue.let (::println)
+        letValue.let (MyUtils::convertName)
+
+        // * with
+        // 非拡張関数（non-extension function）。レシーバーはthisになる。
+
+        // 戻り値はlambda result。
+        // context objectのメソッドの呼び出しをしたいだけの場合が主な利用方法。
+        val textValue = with(findViewById<TextView>(R.id.textView)) {
+            text = "with"
+            setTextColor(Color.BLUE)
+            println(this.text)
+            // クラスのインスタンスを呼び出したい時は@クラス名を付ける
+            println(this@MainActivity.toString())
+            text.toString()
+        }
+        Log.d("toUseScope-with", textValue)
+
+        // * run
+        // レシーバーはthisになる。
+        // 基本はwithと同じ動作だが、拡張関数としてletが実行される
+        // letで初期化処理を行いたい場合が主な用途。
+        // withとほぼ同じ動きだが、withは非拡張関数のためコードの統一性を考えるとこちらのほうが一般的。
+        val textRunValue = findViewById<TextView>(R.id.textView).run {
+            text = "run"
+            setTextColor(Color.RED)
+            println(this.text)
+            "$text Label"
+        }
+
+        // letでrunと同じことをしようとした場合の例。itが必要になる
+        findViewById<TextView>(R.id.textView).let {
+            it.text = "Example of using let instead of run"
+            it.setTextColor(Color.RED)
+        }
+
+        // 非拡張関数でもrunは使用できる。戻り値はlambda result。
+        // コードブロックを分けたい場合に使用する。
+        run {
+            val a1 = 3
+            val a2 = 5
+            Log.d("toUseScope-run non-ex", (a1 + a2).toString())
+        }
+
+        // * apply
+        // context objectに適用するという意味。
+        // レシーバーはthis。
+        // 戻り値はcontext object自身となる。
+        // オブジェクトのメソッドやメンバーをまとめて操作する場合に使用する。
+        val textViewApply = findViewById<TextView>(R.id.textView).apply {
+            text = "apply"
+            setTextColor(Color.RED)
+            println(this.text)
+        }
+        println(textViewApply.text)
+
+
+        // * also
+        // オブジェクトを使って次のようにするという意味。
+        // 戻り値はcontext object自身となる。
+        // 引数はitになる。
+        // 関心がオブジェクトのメソッドやプロパティの変更より、オブジェクト自身にある場合に使用する。
+        val textViewAlso = findViewById<TextView>(R.id.textView).also {
+            it.text = "let"
+            it.setTextColor(Color.RED)
+        }
+        println(textViewAlso.text)
+
+        // letと同じ用に引数の変数名は変更できる。
+        val textViewAlsoTextView = findViewById<TextView>(R.id.textView).also { textView ->
+            textView.text = "let"
+            textView.setTextColor(Color.RED)
+        }
+        println(textViewAlsoTextView.text)
     }
 }
 
